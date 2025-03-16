@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "公网IP查询工具",
+  "version": "1.0",
+  "description": "A Chrome extension to display IP address.",
+  "permissions": [
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://api.myip.com/*",
+    "*://checkip.dyndns.org/*",
+    "*://api.my-ip.io/*",
+    "*://ipinfo.io/*",
+    "*://ifconfig.me/*",
+    "*://ipecho.net/*"
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Show IP Address"
+  },
+  "background": {
+    "service_worker": "background.js"
+  }
+}

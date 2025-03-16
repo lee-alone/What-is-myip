@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>IP Address Viewer</title>
+  <style>
+    body {
+      width: 400px;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+    }
+    .container {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #333;
+      margin-top: 0;
+      font-size: 16px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 10px;
+    }
+    .ip-section {
+      margin-bottom: 20px;
+    }
+    .ip-info {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #666;
+    }
+    .loading {
+      color: #999;
+      font-style: italic;
+    }
+    .ip-row {
+      display: flex;
+      margin-bottom: 16px;
+      flex-direction: column;
+    }
+    .ip-source {
+      color: #2c3e50;
+      font-weight: bold;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .ip-value {
+      color: #3498db;
+      font-size: 16px;
+      padding: 8px;
+      background-color: #f8f9fa;
+      border-radius: 4px;
+    }
+    
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="ip-section">
+      <h2>公网 IP 地址</h2>
+      <div id="ipAddress" class="ip-info">加载中...</div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
