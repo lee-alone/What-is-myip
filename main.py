@@ -160,10 +160,14 @@ class IPCheckerApp:
             self.tree.delete(item)
 
         async def process_results():
+            results = []
             async for result in check_all_ips(self.api_endpoints):
-                self.tree.insert('', tk.END, values=(result['name'], result['ip'], result['server']))
+                results.append(result)
                 self.status_bar.config(text=f"正在查询 {result['name']}...")
-                self.root.update_idletasks()  # 强制更新界面
+            
+            for result in results:
+                self.tree.insert('', tk.END, values=(result['name'], result['ip'], result['server']))
+            
             self.status_bar.config(text="外网IP查询完成")
 
         asyncio.run_coroutine_threadsafe(process_results(), self.loop)

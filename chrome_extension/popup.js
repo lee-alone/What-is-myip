@@ -12,23 +12,30 @@ document.addEventListener('DOMContentLoaded', () => {
   async function displayIpAddresses() {
     ipAddressDiv.innerHTML = '<span class="loading">正在加载...</span>';
     let ipAddresses = [];
-    for (const url of apiEndpoints) {
-      try {
-        const response = await new Promise((resolve, reject) => {
-          chrome.runtime.sendMessage({ action: "fetchIp", url }, response => {
-            if (response.success) {
-              resolve(response.data);
-            } else {
-              reject(new Error(response.error));
-            }
-          });
+    const promises = apiEndpoints.map(url => {
+      return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage({ action: "fetchIp", url }, response => {
+          if (response.success) {
+            resolve({ url, data: response.data });
+          } else {
+            reject({ url, error: new Error(response.error) });
+          }
         });
-        ipAddresses.push(`<div class="ip-row"><div class="ip-source">${new URL(url).hostname}</div><div class="ip-value">${response}</div></div>`);
-      } catch (error) {
+      });
+    });
+
+    const results = await Promise.allSettled(promises);
+
+    ipAddresses = results.map(result => {
+      if (result.status === 'fulfilled') {
+        const { url, data } = result.value;
+        return `<div class="ip-row"><div class="ip-source">${new URL(url).hostname}</div><div class="ip-value">${data}</div></div>`;
+      } else {
+        const { url, error } = result.reason;
         console.error(`Error fetching IP from ${url}:`, error);
-        ipAddresses.push(`<div class="ip-row"><div class="ip-source">${new URL(url).hostname}</div><div class="ip-value">${error.message}</div></div>`);
+        return `<div class="ip-row"><div class="ip-source">${new URL(url).hostname}</div><div class="ip-value">${error.message}</div></div>`;
       }
-    }
+    });
     ipAddressDiv.innerHTML = ipAddresses.join('');
   }
 

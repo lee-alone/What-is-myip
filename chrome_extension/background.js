@@ -3,19 +3,19 @@ async function proxyFetch(url) {
   try {
     const response = await fetch(url);
     const text = await response.text();
-    if (url.includes('checkip.dyndns.org')) {
+    if (url.startsWith('http://checkip.dyndns.org')) {
       const match = text.match(/Current IP Address: ([\d.]+)/);
       return match ? match[1] : text;
     }
-    if (url.includes('api.my-ip.io')) {
+    if (url.startsWith('https://api.my-ip.io')) {
       const data = JSON.parse(text);
       return `${data.ip} (${data.country.code})`;
     }
-    if (url.includes('ipinfo.io')) {
+    if (url.startsWith('https://ipinfo.io')) {
       const data = JSON.parse(text);
       return `${data.ip} (${data.country})`;
     }
-    if (url.includes('api.myip.com')) {
+    if (url.startsWith('http://api.myip.com')) {
       const data = JSON.parse(text);
       if (data && data.ip && data.cc) {
         return `${data.ip} (${data.cc})`;

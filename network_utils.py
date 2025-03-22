@@ -71,20 +71,8 @@ async def fetch_ip_info(session: aiohttp.ClientSession, endpoint: Dict[str, str]
         }
 
 async def check_all_ips(endpoints: List[Dict[str, str]]):
-    # 分离默认端点和自定义端点
-    default_endpoints = [ep for ep in endpoints if ep['name'] in ['IPInfo.io', 'My-IP.io', 'DynDNS', 'MyIP.com']]
-    custom_endpoints = [ep for ep in endpoints if ep['name'] not in ['IPInfo.io', 'My-IP.io', 'DynDNS', 'MyIP.com']]
-    
     async with aiohttp.ClientSession() as session:
-        # 首先并发查询所有默认端点
-        default_tasks = [fetch_ip_info(session, endpoint) for endpoint in default_endpoints]
-        default_results = await asyncio.gather(*default_tasks)
-        for result in default_results:
+        tasks = [fetch_ip_info(session, endpoint) for endpoint in endpoints]
+        results = await asyncio.gather(*tasks)
+        for result in results:
             yield result
-        
-        # 然后并发查询所有自定义端点
-        if custom_endpoints:
-            custom_tasks = [fetch_ip_info(session, endpoint) for endpoint in custom_endpoints]
-            custom_results = await asyncio.gather(*custom_tasks)
-            for result in custom_results:
-                yield result
